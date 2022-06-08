@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="scroll-smooth" data-theme="halloween">
+<html class="scroll-smooth" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -28,7 +28,7 @@
       </div>
     </header>
     <main>
-      <!-- modal -->
+      <!-- modal cart -->
       <section>
         <input type="checkbox" id="cart-modal" class="modal-toggle" />
         <label for="cart-modal" class="modal bg-opacity-80 cursor-pointer">
@@ -163,6 +163,17 @@
           </label>
         </label>
       </section>
+      <!-- modal remove question -->
+      <input type="checkbox" id="question-modal" class="modal-toggle" />
+      <div class="modal flex justify-center modal-middle">
+        <div class="modal-box max-w-sm">
+          <h3 class="font-bold text-lg text-center" id="question-modal-title"></h3>
+          <div class="modal-action flex justify-center gap-2">
+            <label for="question-modal" class="btn text-primary-content btn-primary btn-sm px-6 pb-2 pt-2.5">no</label>
+            <label for="question-modal" id="question-modal-yes-btn" class="btn btn-sm px-6 pb-2 pt-2.5">yes</label>
+          </div>
+        </div>
+      </div>
       <!-- cards -->
       <section id="products" class="mt-10 mb-[150px] sm:mb-28 gap-y-6 container px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-6 xl:grid-cols-4 place-items-center"></section>
     </main> 

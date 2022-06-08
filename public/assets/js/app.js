@@ -5,8 +5,23 @@ import { productsData } from "./products.js";
 //! classes
 
 class SaveToStorage {
-  static addToLocalStorage(products) {
-    localStorage.setItem("products", JSON.stringify(products));
+  static updateStorage() {
+    localStorage.setItem("cartItems", JSON.stringify(Cart.cartItems));
+  }
+  static restore() {
+    //? add localStorage items to cartItems
+    const localStorageItems = JSON.parse(localStorage.getItem('cartItems'));
+    localStorageItems.forEach((item) => {
+      Cart.cartItems.push(item);
+      Cart.totalPrice += item['price'] * item['quantity'];
+    });
+    //? add to dom
+    Cart.addToDom();
+    //? update cart modal footer
+    Cart.cartModalFooter();
+    //? ..
+    Cart.removeFromCart();
+    Cart.plusAndMinusItem();
   }
 }
 
@@ -55,9 +70,9 @@ class Cart {
   static getItems() {
     return this.cartItems;
   }
-  static addToDom(cartItem) {
+  static addToDom() {
     let html = "";
-    cartItem.forEach((i) => {
+    Cart.cartItems.forEach((i) => {
       html += `<li class="flex justify-between items-center" data-id=${i.id}>
       <img src=${i.image} class="w-[110px] sm:w-[150px] rounded-lg" alt="game">
       <div class="flex flex-col gap-1 w-[120px] sm:w-[150px]">
@@ -75,8 +90,6 @@ class Cart {
       </li>`;
       $("#cart-items")[0].innerHTML = html;
     });
-    // open cart modal
-    $('#cart-modal')[0].checked = true;
   }
   static removeFromCart() {
     $('.remove').forEach((i) => {
@@ -87,8 +100,12 @@ class Cart {
         const productSelected = Cart.cartItems.find(({ id }) => id === parseInt(productId));
         // remove from cardItems
         this.cartItems.splice(this.cartItems.indexOf(productSelected),1);
+        // update local storage
+        SaveToStorage.updateStorage();
         // add and update cart items
-        Cart.addToDom(Cart.cartItems);
+        Cart.addToDom();
+        // open cart modal
+        $('#cart-modal')[0].checked = true;
         // remove item remove price from total price
         this.totalPrice -= (productSelected['price'] * productSelected['quantity']);
         // reset cart with click clear all btn , set cart item lengh , set total price
@@ -102,11 +119,12 @@ class Cart {
         }
       });
     });
-    $('#cart-modal')[0].checked;
   }
   static cartModalFooter(){
     $("#reset-cart")[0].addEventListener('click',()=>{
       this.cartItems.length = 0;
+      this.totalPrice = 0;
+      localStorage.removeItem("cartItems");
     });
     $("#cart-length")[0].innerText = this.cartItems.length;
     $('#total-price')[0].innerText = this.totalPrice;
@@ -121,11 +139,15 @@ class Cart {
         // update show quantity number in cart modal
         productSelected['quantity'] += 1;
         // add and update cart items
-        Cart.addToDom(Cart.cartItems);
+        Cart.addToDom();
+        // open cart modal
+        $('#cart-modal')[0].checked = true;
         // add card selected price to total price 
         this.totalPrice += productSelected['price'];
         // update cart modal footer
         Cart.cartModalFooter();
+        // update local storage
+        SaveToStorage.updateStorage();
         // show cart modal with remove item
         if ((this.cartItems.length) > 0){
           $('#cart-modal')[0].checked = false;
@@ -144,15 +166,26 @@ class Cart {
         // update show quantity number in cart modal
         productSelected['quantity'] -= 1;
         // add and update cart items
-        Cart.addToDom(Cart.cartItems);
+        Cart.addToDom();
+        // open cart modal
+        $('#cart-modal')[0].checked = true;
         // add card selected price to total price 
         this.totalPrice -= productSelected['price'];
         // update cart modal footer
         Cart.cartModalFooter();
+        // update local storage
+        SaveToStorage.updateStorage();
         if(productSelected['quantity'] === 0) {
+          // remove item from cartItems
           this.cartItems.splice(this.cartItems.indexOf(productSelected),1);
+          // update local storage
+          SaveToStorage.updateStorage();
+          // update cart modal footer
+          Cart.cartModalFooter();
           // add and update cart items
-          Cart.addToDom(Cart.cartItems);
+          Cart.addToDom();
+          // open cart modal
+          $('#cart-modal')[0].checked = true;
         }
         // show modal 
         $('#cart-modal')[0].checked = false;
@@ -161,8 +194,6 @@ class Cart {
         this.removeFromCart();
       });
     });
-    // show modal 
-    $('#cart-modal')[0].checked;
   }
 }
 
@@ -172,14 +203,12 @@ class Theme {
     "cupcake",
     "bumblebee",
     "emerald",
-    "synthwave",
     "halloween",
     "forest",
     "luxury",
     "dracula",
     "cmyk",
     "autumn",
-    "acid",
     "lemonade",
     "night",
     "coffee",
@@ -211,6 +240,9 @@ addEventListener("DOMContentLoaded", () => {
   //? check item in cart
   Cart.checkCart();
 
+  //? restore cart item from local storage
+  JSON.parse(localStorage.getItem('cartItems')) ? SaveToStorage.restore() : '';
+
   //? add product to cart
   [...$(".buy-btn")].forEach((i) => {
     i.addEventListener("click", (e) => {
@@ -236,7 +268,10 @@ addEventListener("DOMContentLoaded", () => {
       }
 
       //? add to cart 
-      Cart.addToDom(Cart.cartItems);
+      Cart.addToDom();
+
+      //? open cart modal
+      $('#cart-modal')[0].checked = true;
 
       //? reset cart with click clear all btn , set cart item lengh , set total price
       Cart.cartModalFooter();
@@ -247,8 +282,9 @@ addEventListener("DOMContentLoaded", () => {
       //? remove item from cart with click trash icon
       Cart.removeFromCart();
 
+      //? add product to local storage
+      SaveToStorage.updateStorage();
+
     });
   });
 });
-
-$('.modal-toggle')[0].checked
