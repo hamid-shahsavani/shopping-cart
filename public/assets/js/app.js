@@ -8,7 +8,10 @@ class SaveToStorage {
   static updateStorage() {
     localStorage.setItem("cartItems", JSON.stringify(Cart.cartItems));
   }
-  static restore() {
+  static updateTheme(theme) {
+    localStorage.setItem("theme", JSON.stringify(theme));
+  }
+  static restoreCartItems() {
     //? add localStorage items to cartItems
     const localStorageItems = JSON.parse(localStorage.getItem('cartItems'));
     localStorageItems.forEach((item) => {
@@ -22,6 +25,9 @@ class SaveToStorage {
     //? ..
     Cart.removeFromCart();
     Cart.plusAndMinusItem();
+  }
+  static restoreTheme() {
+    $("html")[0].dataset.theme = JSON.parse(localStorage.getItem('theme'));
   }
 }
 
@@ -218,6 +224,7 @@ class Theme {
     $("#change-theme")[0].addEventListener("click", () => {
       const randomTheme = this.themes[(Math.random() * this.themes.length) | 0];
       $("html")[0].dataset.theme = randomTheme;
+      SaveToStorage.updateTheme(randomTheme);
     });
   }
 }
@@ -241,7 +248,10 @@ addEventListener("DOMContentLoaded", () => {
   Cart.checkCart();
 
   //? restore cart item from local storage
-  JSON.parse(localStorage.getItem('cartItems')) ? SaveToStorage.restore() : '';
+  JSON.parse(localStorage.getItem('cartItems')) ? SaveToStorage.restoreCartItems() : '';
+
+  //? restore cart item from local storage
+  JSON.parse(localStorage.getItem('theme')) ? SaveToStorage.restoreTheme() : '';
 
   //? add product to cart
   [...$(".buy-btn")].forEach((i) => {
