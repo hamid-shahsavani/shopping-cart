@@ -163,14 +163,34 @@
           </label>
         </label>
       </section>
-      <!-- modal remove question -->
-      <input type="checkbox" id="question-modal" class="modal-toggle" />
+      <!-- modal dom loaded -->
+      <input type="checkbox" id="question-modal" class="modal-toggle" checked />
       <div class="modal flex justify-center modal-middle">
-        <div class="modal-box max-w-sm">
-          <h3 class="font-bold text-lg text-center" id="question-modal-title"></h3>
+        <div class="modal-box max-w-md">
+          <div class="flex flex-col justify-center space-y-6">
+            <div>
+              <h3 class="font-bold text-lg mb-1">shopping cart features</h3>
+              <ul class="list-disc ml-5">
+                <li class="text-neutral-content">add and remove item from cart</li>
+                <li class="text-neutral-content">minus and plus quantity cart items</li>
+                <li class="text-neutral-content">reset cart items</li>
+                <li class="text-neutral-content">save cart items in localStorage</li>
+                <li class="text-neutral-content">random change theme [for fun!]</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-1">web development technologies</h3>
+              <ul class="list-disc ml-5">
+                <li class="text-neutral-content">html</li>
+                <li class="text-neutral-content">tailwind + daisyui</li>
+                <li class="text-neutral-content">vanillaJS</li>
+              </ul>
+            </div>
+          </div>
+          <div class="w-full flex justify-center">
+          </div>
           <div class="modal-action flex justify-center gap-2">
-            <label for="question-modal" class="btn text-primary-content btn-primary btn-sm px-6 pb-2 pt-2.5">no</label>
-            <label for="question-modal" id="question-modal-yes-btn" class="btn btn-sm px-6 pb-2 pt-2.5">yes</label>
+            <label for="question-modal" class="btn text-primary-content btn-primary btn-sm mt-3 px-8 pb-5 pt-3.5">ok</label>
           </div>
         </div>
       </div>
