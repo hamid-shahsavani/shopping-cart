@@ -86,7 +86,7 @@ class Cart {
         <p class="text-neutral-content font-light text-sm sm:text-base">${[i.price]*[i.quantity]} $</p>
       </div>
       <div class="flex flex-col gap-1">
-        <button class="plus bg-primary w-[18px] h-[18px] sm:w-6 sm:h-6 text-primary-content text-lg sm:text-xl rounded-full relative"><p class="absolute -top-[3px] left-[3px] sm:static">+</p></button>
+        <button class="plus bg-primary w-[18px] h-[18px] sm:w-6 sm:h-6 text-primary-content text-lg sm:text-xl rounded-full relative flex justify-center items-center"><p class="absolute -bottom-[7px] sm:-bottom-[3px] sm:right-[7px]">+</p></button>
         <p class="text-sm text-neutral-content flex justify-center items-center mt-1.5">${i.quantity}</p>
         <button class="minus border border-primary h-[18px] w-[18px] sm:w-6 sm:h-6 flex items-center justify-center text-primary text-lg text-[27px] rounded-full">-</button>
       </div>
