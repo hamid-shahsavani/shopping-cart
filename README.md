@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/sys113/shopping-cart/master/screenshot.png" style="border-radius:20px">
+  <img src="https://github.com/sys113/shopping-cart/blob/main/screenshot.png" style="border-radius:20px">
 </div>
 
 ---
