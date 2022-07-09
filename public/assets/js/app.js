@@ -13,21 +13,20 @@ class SaveToStorage {
   }
   static restoreCartItems() {
     //? add localStorage items to cartItems
-    const localStorageItems = JSON.parse(localStorage.getItem('cartItems'));
+    const localStorageItems = JSON.parse(localStorage.getItem("cartItems"));
     localStorageItems.forEach((item) => {
       Cart.cartItems.push(item);
-      Cart.totalPrice += item['price'] * item['quantity'];
+      Cart.totalPrice += item["price"] * item["quantity"];
     });
     //? add to dom
     Cart.addToDom();
     //? update cart modal footer
     Cart.cartModalFooter();
-    //? ..
     Cart.removeFromCart();
     Cart.plusAndMinusItem();
   }
   static restoreTheme() {
-    $("html")[0].dataset.theme = JSON.parse(localStorage.getItem('theme'));
+    $("html")[0].dataset.theme = JSON.parse(localStorage.getItem("theme"));
   }
 }
 
@@ -82,12 +81,18 @@ class Cart {
       html += `<li class="flex justify-between items-center" data-id=${i.id}>
       <img src=${i.image} class="w-[110px] sm:w-[150px] rounded-lg" alt="game">
       <div class="flex flex-col gap-1 w-[120px] sm:w-[150px]">
-        <p class="text-neutral-content font-bold text-sm sm:text-lg">${i.title}</p>
-        <p class="text-neutral-content font-light text-sm sm:text-base">${[i.price]*[i.quantity]} $</p>
+        <p class="text-neutral-content font-bold text-sm sm:text-lg">${
+          i.title
+        }</p>
+        <p class="text-neutral-content font-light text-sm sm:text-base">${
+          [i.price] * [i.quantity]
+        } $</p>
       </div>
       <div class="flex flex-col gap-1">
         <button class="plus bg-primary w-[18px] h-[18px] sm:w-6 sm:h-6 text-primary-content text-lg sm:text-xl rounded-full relative flex justify-center items-center"><p class="absolute -bottom-[7px] sm:-bottom-[3px] sm:right-[7px]">+</p></button>
-        <p class="text-sm text-neutral-content flex justify-center items-center mt-1.5">${i.quantity}</p>
+        <p class="text-sm text-neutral-content flex justify-center items-center mt-1.5">${
+          i.quantity
+        }</p>
         <button class="minus border border-primary h-[18px] w-[18px] sm:w-6 sm:h-6 flex items-center justify-center text-primary text-lg text-[27px] rounded-full">-</button>
       </div>
       <button>
@@ -98,92 +103,105 @@ class Cart {
     });
   }
   static removeFromCart() {
-    $('.remove').forEach((i) => {
-      i.addEventListener('click',(e)=>{
+    $(".remove").forEach((i) => {
+      i.addEventListener("click", (e) => {
         // get trash parent data-id
-        const productId = (e.target.parentElement.parentElement.parentElement.dataset.id) || (e.target.parentElement.parentElement.dataset.id);
+        const productId =
+          e.target.parentElement.parentElement.parentElement.dataset.id ||
+          e.target.parentElement.parentElement.dataset.id;
         // select trash data-id from cardItems
-        const productSelected = Cart.cartItems.find(({ id }) => id === parseInt(productId));
+        const productSelected = Cart.cartItems.find(
+          ({ id }) => id === parseInt(productId)
+        );
         // remove from cardItems
-        this.cartItems.splice(this.cartItems.indexOf(productSelected),1);
+        this.cartItems.splice(this.cartItems.indexOf(productSelected), 1);
         // update local storage
         SaveToStorage.updateStorage();
         // add and update cart items
         Cart.addToDom();
         // open cart modal
-        $('#cart-modal')[0].checked = true;
+        $("#cart-modal")[0].checked = true;
         // remove item remove price from total price
-        this.totalPrice -= (productSelected['price'] * productSelected['quantity']);
+        this.totalPrice -=
+          productSelected["price"] * productSelected["quantity"];
         // reset cart with click clear all btn , set cart item lengh , set total price
         Cart.cartModalFooter();
         // call again plus and minus item and remove from cart function
         this.plusAndMinusItem();
         this.removeFromCart();
         // show cart modal with remove item
-        if ((this.cartItems.length) > 0){
-          $('#cart-modal')[0].checked = false;
+        if (this.cartItems.length > 0) {
+          $("#cart-modal")[0].checked = false;
         }
       });
     });
   }
-  static cartModalFooter(){
-    $("#reset-cart")[0].addEventListener('click',()=>{
+  static cartModalFooter() {
+    $("#reset-cart")[0].addEventListener("click", () => {
       this.cartItems.length = 0;
       this.totalPrice = 0;
       localStorage.removeItem("cartItems");
     });
     $("#cart-length")[0].innerText = this.cartItems.length;
-    $('#total-price')[0].innerText = this.totalPrice;
+    $("#total-price")[0].innerText = this.totalPrice;
   }
-  static plusAndMinusItem(){
-    $('.plus').forEach((i) => {
-      i.addEventListener('click',(e)=>{
+  static plusAndMinusItem() {
+    $(".plus").forEach((i) => {
+      i.addEventListener("click", (e) => {
         // get trash parent data-id
-        const productId = (e.target.parentElement.parentElement.parentElement.dataset.id) || (e.target.parentElement.parentElement.dataset.id);
+        const productId =
+          e.target.parentElement.parentElement.parentElement.dataset.id ||
+          e.target.parentElement.parentElement.dataset.id;
         // select trash data-id from cardItems
-        const productSelected = Cart.cartItems.find(({ id }) => id === parseInt(productId));
+        const productSelected = Cart.cartItems.find(
+          ({ id }) => id === parseInt(productId)
+        );
         // update show quantity number in cart modal
-        productSelected['quantity'] += 1;
+        productSelected["quantity"] += 1;
         // add and update cart items
         Cart.addToDom();
         // open cart modal
-        $('#cart-modal')[0].checked = true;
-        // add card selected price to total price 
-        this.totalPrice += productSelected['price'];
+        $("#cart-modal")[0].checked = true;
+        // add card selected price to total price
+        this.totalPrice += productSelected["price"];
         // update cart modal footer
         Cart.cartModalFooter();
         // update local storage
         SaveToStorage.updateStorage();
         // show cart modal with remove item
-        if ((this.cartItems.length) > 0){
-          $('#cart-modal')[0].checked = false;
+        if (this.cartItems.length > 0) {
+          $("#cart-modal")[0].checked = false;
         }
         // call plus and minus item and remove from cart function
         this.plusAndMinusItem();
         this.removeFromCart();
       });
     });
-    $('.minus').forEach((i) => {
-      i.addEventListener('click',(e)=>{
+    $(".minus").forEach((i) => {
+      i.addEventListener("click", (e) => {
         // get trash parent data-id
-        const productId = (e.target.parentElement.parentElement.parentElement.dataset.id) || (e.target.parentElement.parentElement.dataset.id);
+        const productId =
+          e.target.parentElement.parentElement.parentElement.dataset.id ||
+          e.target.parentElement.parentElement.dataset.id;
         // select trash data-id from cardItems
-        const productSelected = Cart.cartItems.find(({ id }) => id === parseInt(productId));
+        const productSelected = Cart.cartItems.find(
+          ({ id }) => id === parseInt(productId)
+        );
         // update show quantity number in cart modal
-        productSelected['quantity'] -= 1;
+        productSelected["quantity"] -= 1;
         // add and update cart items
         Cart.addToDom();
         // open cart modal
-        $('#cart-modal')[0].checked = true;
-        // add card selected price to total price 
-        this.totalPrice -= productSelected['price'];
+        $("#cart-modal")[0].checked = true;
+        // add card selected price to total price
+        this.totalPrice -= productSelected["price"];
         // update cart modal footer
         Cart.cartModalFooter();
         // update local storage
         SaveToStorage.updateStorage();
-        if(productSelected['quantity'] === 0) {
+        if (productSelected["quantity"] === 0) {
           // remove item from cartItems
-          this.cartItems.splice(this.cartItems.indexOf(productSelected),1);
+          this.cartItems.splice(this.cartItems.indexOf(productSelected), 1);
           // update local storage
           SaveToStorage.updateStorage();
           // update cart modal footer
@@ -191,10 +209,10 @@ class Cart {
           // add and update cart items
           Cart.addToDom();
           // open cart modal
-          $('#cart-modal')[0].checked = true;
+          $("#cart-modal")[0].checked = true;
         }
-        // show modal 
-        $('#cart-modal')[0].checked = false;
+        // show modal
+        $("#cart-modal")[0].checked = false;
         // call plus and minus item and remove from cart function
         this.plusAndMinusItem();
         this.removeFromCart();
@@ -248,40 +266,47 @@ addEventListener("DOMContentLoaded", () => {
   Cart.checkCart();
 
   //? restore cart item from local storage
-  JSON.parse(localStorage.getItem('cartItems')) ? SaveToStorage.restoreCartItems() : '';
+  JSON.parse(localStorage.getItem("cartItems"))
+    ? SaveToStorage.restoreCartItems()
+    : "";
 
   //? restore cart item from local storage
-  JSON.parse(localStorage.getItem('theme')) ? SaveToStorage.restoreTheme() : '';
+  JSON.parse(localStorage.getItem("theme")) ? SaveToStorage.restoreTheme() : "";
 
   //? add product to cart
   [...$(".buy-btn")].forEach((i) => {
     i.addEventListener("click", (e) => {
-
       //? get product id clicked
       const productId = e.target.dataset.id;
 
       //? check is product in cart
-      const isCart = Cart.cartItems.find(({ id }) => id === parseInt(productId));
+      const isCart = Cart.cartItems.find(
+        ({ id }) => id === parseInt(productId)
+      );
       if (isCart) {
-        // true : add +1 to quality number 
-        const getProductById = Cart.cartItems.find((i) => i.id === parseInt(productId));
-        getProductById['quantity'] = getProductById['quantity']+1;
-        // add cart price to total price 
-        Cart.totalPrice += (parseInt(getProductById['price']));
+        // true : add +1 to quality number
+        const getProductById = Cart.cartItems.find(
+          (i) => i.id === parseInt(productId)
+        );
+        getProductById["quantity"] = getProductById["quantity"] + 1;
+        // add cart price to total price
+        Cart.totalPrice += parseInt(getProductById["price"]);
       } else {
         // false : add product to cart
-        const getProductById = Products.getProduct().find((i) => i.id === parseInt(productId));
-        getProductById['quantity'] = 1;
+        const getProductById = Products.getProduct().find(
+          (i) => i.id === parseInt(productId)
+        );
+        getProductById["quantity"] = 1;
         Cart.cartItems.push(getProductById);
-        // add cart price to total price 
-        Cart.totalPrice += (parseInt(getProductById['price']));
+        // add cart price to total price
+        Cart.totalPrice += parseInt(getProductById["price"]);
       }
 
-      //? add to cart 
+      //? add to cart
       Cart.addToDom();
 
       //? open cart modal
-      $('#cart-modal')[0].checked = true;
+      $("#cart-modal")[0].checked = true;
 
       //? reset cart with click clear all btn , set cart item lengh , set total price
       Cart.cartModalFooter();
@@ -294,7 +319,6 @@ addEventListener("DOMContentLoaded", () => {
 
       //? add product to local storage
       SaveToStorage.updateStorage();
-
     });
   });
 });
