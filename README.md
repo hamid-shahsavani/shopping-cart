@@ -11,8 +11,6 @@
 ## tips
 
 * fully responsive for mobile, tablet, laptop and desktop
-* filter product with tabs
-* filter product with input text value
 
 ---
 ## features
